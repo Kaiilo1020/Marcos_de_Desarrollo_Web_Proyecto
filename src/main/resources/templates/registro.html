@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="d-flex flex-column min-vh-100">
+
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <main class="main-content flex-grow-1">
+        <section class="py-5">
+            <div class="container py-4">
+                <div class="text-center mb-5">
+                    <i class="bi bi-box-seam display-4 text-corporativo mb-3"></i>
+                    <h2 class="fw-bolder text-corporativo">Gestion de Operaciones</h2>
+                    <p class="text-muted">Registra ingresos de mercaderia o reporta incidencias del inventario.</p>
+                </div>
+
+                <div class="row justify-content-center g-4">
+                    
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm border-0 h-100">
+                            <div class="card-body p-4 p-md-5">
+                                <h4 class="fw-bold mb-4"><i class="bi bi-capsule text-exito me-2"></i>Ingreso de Mercaderia</h4>
+                                <form th:action="@{/registro/mercaderia}" method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Nombre del Medicamento</label>
+                                        <input type="text" name="nombre" class="form-control bg-light" placeholder="Ej. Paracetamol 500mg" required>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Categoria</label>
+                                            <select name="categoria" class="form-select bg-light" required>
+                                                <option value="" selected disabled>Seleccionar...</option>
+                                                <option>Analgesico</option>
+                                                <option>Antibiotico</option>
+                                                <option>Antiinflamatorio</option>
+                                                <option>Antihistaminico</option>
+                                                <option>Antidiabetico</option>
+                                                <option>Broncodilatador</option>
+                                                <option>Otros</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Cantidad (Unidades)</label>
+                                            <input type="number" name="cantidad" class="form-control bg-light" min="1" placeholder="0" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold">Lote / Vencimiento</label>
+                                        <input type="text" name="loteVencimiento" class="form-control bg-light" placeholder="Ej. Lote A-123 - Vence 12/2026" required>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-corporativo w-100 fw-bold">
+                                        <i class="bi bi-check2-circle me-2"></i>Registrar Ingreso
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm border-0 h-100">
+                            <div class="card-body p-4 p-md-5">
+                                <h4 class="fw-bold mb-4"><i class="bi bi-exclamation-octagon text-advertencia me-2"></i>Reportar Incidencia</h4>
+                                <form th:action="@{/registro/incidencia}" method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Tipo de incidencia</label>
+                                        <select name="tipo" class="form-select bg-light" required>
+                                            <option value="" selected disabled>Seleccionar tipo...</option>
+                                            <option value="Merma">Merma (producto danado)</option>
+                                            <option value="Accidente">Accidente/Rotura</option>
+                                            <option value="Vencido">Producto vencido no registrado</option>
+                                            <option value="Perdida">Perdida/Misterio</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Medicamento afectado</label>
+                                        <input type="text" name="medicamento" class="form-control bg-light" placeholder="Ej. Amoxicilina 500mg" required>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Cantidad afectada</label>
+                                            <input type="number" name="cantidad" class="form-control bg-light" min="1" placeholder="0" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Fecha del incidente</label>
+                                            <input type="date" name="fecha" class="form-control bg-light" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold">Descripcion breve</label>
+                                        <textarea name="descripcion" class="form-control bg-light" rows="2" placeholder="Describa que ocurrio..." required></textarea>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-advertencia w-100 fw-bold">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>Registrar Incidencia
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row mt-5" th:if="${!#lists.isEmpty(incidencias)}">
+                    <div class="col-12">
+                        <h4 class="fw-bold text-corporativo mb-3">Incidencias Registradas</h4>
+                        <div class="table-responsive bg-white rounded shadow-sm border">
+                            <table class="table align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Medicamento</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th>Fecha</th>
+                                        <th>Descripcion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="inc : ${incidencias}">
+                                        <td><span class="badge bg-light text-dark border" th:text="${inc.tipo}">Tipo</span></td>
+                                        <td class="fw-bold" th:text="${inc.medicamentoAfectado}">Medicamento</td>
+                                        <td class="text-center" th:text="${inc.cantidadAfectada}">0</td>
+                                        <td th:text="${#temporals.format(inc.fechaIncidente, 'dd/MM/yyyy')}">01/01/2026</td>
+                                        <td th:text="${inc.descripcion}">Descripcion</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-exito text-white border-0">
+                    <h5 class="modal-title" id="modalLabel"><i class="bi bi-check-circle-fill me-2"></i>Registro Exitoso</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <p class="fs-5 mb-0">El registro ha sido guardado correctamente.</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center pb-4">
+                    <button type="button" class="btn btn-corporativo px-4" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

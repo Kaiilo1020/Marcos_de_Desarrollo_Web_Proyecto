@@ -1,0 +1,240 @@
+/* Nova Farma - Estilos personalizados */
+
+body {
+    background-color: #F8F6F3;
+    scroll-behavior: smooth;
+}
+
+/* Colores corporativos */
+.text-corporativo {
+    color: #212529 !important;
+}
+
+.bg-corporativo {
+    background-color: #212529 !important;
+}
+
+.btn-corporativo {
+    background-color: #212529;
+    border-color: #212529;
+    color: white;
+}
+
+.btn-corporativo:hover {
+    background-color: #1a1d21;
+    border-color: #1a1d21;
+    color: white;
+}
+
+/* Colores tierra */
+.text-tierra {
+    color: #8B7355 !important;
+}
+
+.bg-tierra {
+    background-color: #8B7355 !important;
+}
+
+
+/* Colores semánticos */
+.text-exito {
+    color: #5B8C5A !important;
+}
+
+.bg-exito {
+    background-color: #5B8C5A !important;
+}
+
+.text-advertencia {
+    color: #D4A853 !important;
+}
+
+.bg-advertencia {
+    background-color: #D4A853 !important;
+}
+
+.text-peligro {
+    color: #B85450 !important;
+}
+
+.bg-peligro {
+    background-color: #B85450 !important;
+}
+
+/* Bordes para cards semánticos */
+.card-border-exito {
+    border-color: #5B8C5A !important;
+}
+
+.card-border-advertencia {
+    border-color: #D4A853 !important;
+}
+
+.card-border-peligro {
+    border-color: #B85450 !important;
+}
+
+/* Fondos translúcidos para filas de tabla */
+.table-row-peligro {
+    background-color: rgba(184, 84, 80, 0.1);
+}
+
+.table-row-advertencia {
+    background-color: rgba(212, 168, 83, 0.1);
+}
+
+/* Navbar */
+.navbar-corporativo {
+    background-color: #212529;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+}
+
+/* Main Content */
+.main-content {
+    padding-top: 76px;
+    min-height: 100vh;
+}
+
+section {
+    scroll-margin-top: 76px;
+}
+
+/* Hero y secciones */
+.hero-section {
+    background: linear-gradient(135deg, #F8F6F3 0%, #EDE8E2 100%);
+    border-bottom: 1px solid #d5cec5;
+}
+
+
+/* Cards y tablas */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.table-responsive {
+    border-radius: 0.375rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Colores de tabla alternados */
+.table-tierra tbody tr:nth-of-type(odd) {
+    background-color: rgba(248, 246, 243, 0.5);
+}
+
+/* Formularios */
+.form-control:focus, .form-select:focus {
+    border-color: #8B7355;
+    box-shadow: 0 0 0 0.25rem rgba(139, 115, 85, 0.15);
+}
+
+/* Validación de formularios - estilos para campos inválidos */
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid,
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #B85450;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23B85450'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23B85450' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.was-validated .form-control:invalid:focus,
+.was-validated .form-select:invalid:focus {
+    border-color: #B85450;
+    box-shadow: 0 0 0 0.25rem rgba(184, 84, 80, 0.25);
+}
+
+/* Mostrar mensaje de error cuando el campo es inválido */
+.was-validated .form-control:invalid ~ .invalid-feedback,
+.was-validated .form-select:invalid ~ .invalid-feedback,
+.form-control.is-invalid ~ .invalid-feedback,
+.form-select.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+.invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #B85450;
+}
+
+/* Utilidades adicionales */
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+/* Botones personalizados */
+.btn-tierra {
+    background-color: #8B7355;
+    border-color: #8B7355;
+    color: white;
+}
+
+.btn-tierra:hover {
+    background-color: #7a6549;
+    border-color: #7a6549;
+    color: white;
+}
+
+.btn-advertencia {
+    background-color: #D4A853;
+    border-color: #D4A853;
+    color: #212529;
+}
+
+.btn-advertencia:hover {
+    background-color: #c49a4a;
+    border-color: #c49a4a;
+    color: #212529;
+}
+
+.btn-peligro {
+    background-color: #B85450;
+    border-color: #B85450;
+    color: white;
+}
+
+.btn-peligro:hover {
+    background-color: #a04844;
+    border-color: #a04844;
+    color: white;
+}
+
+/* ============================================
+   TABLAS RESPONSIVE EN MÓVILES
+   ============================================ */
+
+/* Asegurar que las tablas tengan ancho mínimo para activar scroll en 375px */
+@media (max-width: 576px) {
+    .table-responsive table {
+        min-width: 500px;
+    }
+
+    /* Las celdas no se comprimen tanto */
+    .table-responsive td,
+    .table-responsive th {
+        white-space: nowrap;
+    }
+
+    /* Padding reducido en móviles para aprovechar mejor el espacio */
+    .table-responsive .px-4 {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+}

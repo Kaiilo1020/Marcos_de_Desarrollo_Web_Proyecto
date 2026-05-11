@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="d-flex flex-column min-vh-100">
+
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <main class="main-content flex-grow-1">
+        <section class="py-5 hero-section">
+            <div class="container py-4">
+                <div class="row align-items-center mb-5">
+                    <div class="col-lg-7">
+                        <span class="badge bg-exito mb-2 px-3 py-2 rounded-pill">Panel de Administracion</span>
+                        <h1 class="display-5 fw-bolder text-corporativo mb-3">Gestion Inteligente de <span class="text-exito">Farmacia</span></h1>
+                        <p class="lead text-secondary mb-0">Controla tu inventario, monitorea vencimientos y registra movimientos en tiempo real con Nova Farma.</p>
+                    </div>
+                    <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                        <img th:src="@{/img/adminitarcionfarmacia.jpg}" alt="Ilustracion Farmacia" class="img-fluid rounded-4 shadow-sm" style="max-height: 280px; object-fit: cover;">
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card h-100 shadow-sm border-0 border-start border-4 card-border-exito">
+                            <div class="card-body">
+                                <h6 class="text-muted text-uppercase mb-2">Total Productos</h6>
+                                <h2 class="mb-0 fw-bold text-corporativo" th:text="${totalProductos}">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card h-100 shadow-sm border-0 border-start border-4 card-border-exito">
+                            <div class="card-body">
+                                <h6 class="text-muted text-uppercase mb-2">Ventas Hoy</h6>
+                                <h2 class="mb-0 fw-bold text-corporativo" th:text="'S/ ' + ${#numbers.formatDecimal(ventasHoy, 1, 'COMMA', 2, 'POINT')}">S/ 0.00</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card h-100 shadow-sm border-0 border-start border-4 card-border-advertencia">
+                            <div class="card-body">
+                                <h6 class="text-muted text-uppercase mb-2">Movimientos</h6>
+                                <h2 class="mb-0 fw-bold text-corporativo" th:text="${movimientosHoy}">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card h-100 shadow-sm border-0 border-start border-4 card-border-peligro">
+                            <div class="card-body">
+                                <h6 class="text-muted text-uppercase mb-2">Alertas Criticas</h6>
+                                <h2 class="mb-0 fw-bold text-peligro" th:text="${alertasCriticas}">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" th:if="${alertasCriticas > 0}">
+                    <div class="col-12">
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <div>
+                                Hay <strong th:text="${alertasCriticas}">0</strong> productos con alertas criticas. 
+                                <a th:href="@{/alertas}" class="alert-link">Ver alertas</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

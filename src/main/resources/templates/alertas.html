@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="d-flex flex-column min-vh-100">
+
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <main class="main-content flex-grow-1">
+        <section class="py-5">
+            <div class="container py-4">
+                <h2 class="mb-4 fw-bolder text-corporativo">Sistema de Alertas</h2>
+                <p class="text-muted mb-4">Monitoreo de vencimientos y quiebres de stock.</p>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="px-4 py-3">Estado</th>
+                                        <th class="py-3">Producto</th>
+                                        <th class="py-3">Lote</th>
+                                        <th class="py-3 text-center">Stock</th>
+                                        <th class="py-3">Vencimiento</th>
+                                        <th class="px-4 py-3 text-center">Accion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="alerta : ${alertas}" 
+                                        th:classappend="${alerta.stock <= 5 or alerta.vencido} ? 'table-row-peligro' : 'table-row-advertencia'">
+                                        <td class="px-4">
+                                            <span th:if="${alerta.vencido}" class="badge bg-peligro">VENCIDO</span>
+                                            <span th:if="${alerta.venceProximo and !alerta.vencido}" class="badge bg-advertencia text-dark">&lt;30 DIAS</span>
+                                            <span th:if="${alerta.stockBajo and !alerta.vencido and !alerta.venceProximo}" class="badge bg-advertencia text-dark">STOCK BAJO</span>
+                                        </td>
+                                        <td class="fw-bold" th:text="${alerta.nombre}">Producto</td>
+                                        <td th:text="${alerta.lote}">Lote</td>
+                                        <td class="text-center fw-bold" th:text="${alerta.stock}" th:classappend="${alerta.stock <= 5} ? 'text-peligro' : 'text-advertencia'">0</td>
+                                        <td th:text="${#temporals.format(alerta.fechaVencimiento, 'dd/MM/yyyy')}" th:classappend="${alerta.vencido} ? 'text-peligro fw-bold' : 'text-advertencia fw-bold'">01/01/2026</td>
+                                        <td class="px-4 text-center">
+                                            <button th:if="${alerta.vencido}" class="btn btn-sm btn-peligro">Retirar</button>
+                                            <button th:unless="${alerta.vencido}" class="btn btn-sm btn-advertencia">Reordenar</button>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(alertas)}">
+                                        <td colspan="6" class="text-center py-4 text-muted">
+                                            <i class="bi bi-check-circle-fill text-exito me-2"></i>No hay alertas activas. Todo esta bajo control.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
