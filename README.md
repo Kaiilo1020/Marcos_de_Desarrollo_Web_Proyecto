@@ -75,8 +75,22 @@ Marcos_de_Desarrollo_Web_Proyecto-master/
 ## Como Ejecutar
 
 ### Requisitos
-- **Java 21** instalado
+- **Java 21** instalado (obligatorio, el proyecto no funciona con Java 8 u 11)
 - **Maven 3.9+** (solo si compilas desde el codigo fuente)
+
+#### Verificar tu version de Java
+```bash
+java -version
+```
+Debe decir `java version "21.0.X"` o similar.
+
+#### Configurar JAVA_HOME en Windows (PowerShell)
+Si tienes Java 21 instalado pero `java -version` muestra otra version:
+```powershell
+$env:JAVA_HOME="C:\Program Files\Java\jdk-21"
+$env:Path="$env:JAVA_HOME\bin;" + $env:Path
+java -version
+```
 
 ---
 
