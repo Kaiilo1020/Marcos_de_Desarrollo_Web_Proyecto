@@ -67,7 +67,6 @@ Marcos_de_Desarrollo_Web_Proyecto-master/
 |   |   |   |   |   |-- adminitarcionfarmacia.jpg
 |   |   |   |   |   |-- novafarmalogo.png
 |-- capturas/                       (Evidencias ATF1)
-|-- DocumentacionDelProyecto/       (PDFs de clase)
 ```
 
 ---
