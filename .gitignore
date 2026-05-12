@@ -17,3 +17,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Server logs
+server.log
+server.err
