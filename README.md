@@ -73,61 +73,39 @@ Marcos_de_Desarrollo_Web_Proyecto-master/
 
 ## Como Ejecutar
 
-### Requisitos
-- **Java 21** instalado (obligatorio, el proyecto no funciona con Java 8 u 11)
-- **Maven 3.9+** (solo si compilas desde el codigo fuente)
+**Requisito unico:** Java 21 instalado.
 
-#### Verificar tu version de Java
-```bash
-java -version
-```
-Debe decir `java version "21.0.X"` o similar.
+### Paso 1: Compilar (si descargas de GitHub)
 
-#### Configurar JAVA_HOME en Windows (PowerShell)
-Si tienes Java 21 instalado pero `java -version` muestra otra version:
-```powershell
-$env:JAVA_HOME="C:\Program Files\Java\jdk-21"
-$env:Path="$env:JAVA_HOME\bin;" + $env:Path
-java -version
-```
-
----
-
-### Opcion A: Desde codigo fuente (GitHub / Companeros)
+Abre terminal en la carpeta del proyecto y ejecuta:
 
 ```bash
-# 1. Navegar a la carpeta del proyecto
-cd Marcos_de_Desarrollo_Web_Proyecto-master/Marcos_de_Desarrollo_Web_Proyecto-master
-
-# 2. Compilar y generar el JAR
 mvn clean package
-
-# 3. Ejecutar la aplicacion
-java -jar target/novafarma-spring-1.0.0.jar
-
-# 4. Abrir navegador en:
-http://localhost:8080
 ```
 
-### Opcion B: Desde ZIP con JAR incluido (Docente)
+Esto crea el archivo `target/novafarma-spring-1.0.0.jar`.
+
+### Paso 2: Ejecutar
 
 ```bash
-# 1. Descomprimir el ZIP
-# 2. Navegar a la carpeta del proyecto
-cd Marcos_de_Desarrollo_Web_Proyecto-master/Marcos_de_Desarrollo_Web_Proyecto-master
-
-# 3. Ejecutar directamente el JAR
 java -jar target/novafarma-spring-1.0.0.jar
+```
 
-# 4. Abrir navegador en:
+### Paso 3: Abrir en navegador
+
+```
 http://localhost:8080
 ```
 
 ---
 
-### Nota sobre el JAR
-- En GitHub: el JAR no esta incluido (target/ esta en .gitignore). Debes compilar con `mvn clean package`.
-- En el ZIP de entrega: el JAR ya esta incluido en la carpeta `target/`. Solo ejecutas `java -jar`.
+### Si descargas el ZIP de entrega
+
+El JAR ya esta compilado. Solo ejecuta:
+
+```bash
+java -jar target/novafarma-spring-1.0.0.jar
+```
 
 ---
 
