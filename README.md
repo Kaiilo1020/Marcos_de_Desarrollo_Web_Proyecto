@@ -35,7 +35,7 @@ Repository (lista en memoria con @Component)
 Marcos_de_Desarrollo_Web_Proyecto-master/
 |-- pom.xml
 |-- README.md
-|-- README.txt                      (ATF1 original)
+|-- .gitignore                      (Archivos ignorados por Git)
 |-- src/
 |   |-- main/
 |   |   |-- java/com/novafarma/app/
