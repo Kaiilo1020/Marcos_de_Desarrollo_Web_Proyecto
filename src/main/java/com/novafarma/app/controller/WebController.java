@@ -85,10 +85,17 @@ public class WebController {
             Producto p = productoService.buscarPorNombre(medicamento);
             if (p != null) {
                 productoService.eliminarPorNombre(medicamento);
+            } else {
+                return "redirect:/registro?error=producto-no-encontrado";
             }
         } else {
             // Merma, Accidente, Perdida: restar stock del inventario
-            productoService.restarStockOEliminar(medicamento, cantidad);
+            Producto p = productoService.buscarPorNombre(medicamento);
+            if (p != null) {
+                productoService.restarStockOEliminar(medicamento, cantidad);
+            } else {
+                return "redirect:/registro?error=producto-no-encontrado";
+            }
         }
 
         return "redirect:/registro?exito=true";
@@ -98,7 +105,14 @@ public class WebController {
     public String retirarProducto(@RequestParam String nombre) {
         Producto p = productoService.buscarPorNombre(nombre);
         if (p != null) {
-            String tipo = p.isVencido() ? "Retiro por vencimiento" : "Retiro por stock bajo";
+            String tipo;
+            if (p.isVencido()) {
+                tipo = "Vencimiento";
+            } else if (p.isVenceProximo()) {
+                tipo = "Vencimiento proximo";
+            } else {
+                tipo = "Stock bajo";
+            }
             Incidencia incidencia = new Incidencia(tipo, nombre, p.getStock(), LocalDate.now(), "Producto retirado desde Sistema de Alertas");
             incidenciaService.guardar(incidencia);
             productoService.eliminarPorNombre(nombre);

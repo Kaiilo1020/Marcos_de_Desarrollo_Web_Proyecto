@@ -26,16 +26,6 @@ body {
     color: white;
 }
 
-/* Colores tierra */
-.text-tierra {
-    color: #8B7355 !important;
-}
-
-.bg-tierra {
-    background-color: #8B7355 !important;
-}
-
-
 /* Colores semánticos */
 .text-exito {
     color: #5B8C5A !important;
@@ -121,11 +111,6 @@ section {
     -webkit-overflow-scrolling: touch;
 }
 
-/* Colores de tabla alternados */
-.table-tierra tbody tr:nth-of-type(odd) {
-    background-color: rgba(248, 246, 243, 0.5);
-}
-
 /* Formularios */
 .form-control:focus, .form-select:focus {
     border-color: #8B7355;
@@ -180,18 +165,6 @@ section {
 }
 
 /* Botones personalizados */
-.btn-tierra {
-    background-color: #8B7355;
-    border-color: #8B7355;
-    color: white;
-}
-
-.btn-tierra:hover {
-    background-color: #7a6549;
-    border-color: #7a6549;
-    color: white;
-}
-
 .btn-advertencia {
     background-color: #D4A853;
     border-color: #D4A853;

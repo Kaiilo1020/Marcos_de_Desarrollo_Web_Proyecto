@@ -24,7 +24,4 @@ public class IncidenciaRepository {
         return incidencia;
     }
 
-    public long count() {
-        return incidencias.size();
-    }
 }

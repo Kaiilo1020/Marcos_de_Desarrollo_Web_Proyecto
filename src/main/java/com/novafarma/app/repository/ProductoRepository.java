@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ProductoRepository {
@@ -54,16 +55,18 @@ public class ProductoRepository {
     }
 
     public void restarStockOEliminar(String nombre, int cantidad) {
-        productos.stream()
+        Optional<Producto> encontrado = productos.stream()
                 .filter(p -> p.getNombre().equalsIgnoreCase(nombre))
-                .findFirst()
-                .ifPresent(p -> {
-                    int nuevoStock = p.getStock() - cantidad;
-                    if (nuevoStock <= 0) {
-                        productos.remove(p);
-                    } else {
-                        p.setStock(nuevoStock);
-                    }
-                });
+                .findFirst();
+
+        if (encontrado.isPresent()) {
+            Producto p = encontrado.get();
+            int nuevoStock = p.getStock() - cantidad;
+            if (nuevoStock <= 0) {
+                productos.removeIf(prod -> prod.getNombre().equalsIgnoreCase(nombre));
+            } else {
+                p.setStock(nuevoStock);
+            }
+        }
     }
 }
