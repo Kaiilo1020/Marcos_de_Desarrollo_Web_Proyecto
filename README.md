@@ -35,7 +35,7 @@ Repository (lista en memoria con @Component)
 Marcos_de_Desarrollo_Web_Proyecto-master/
 |-- pom.xml
 |-- README.md
-|-- .gitignore                      (Archivos ignorados por Git)
+|-- .gitignore
 |-- src/
 |   |-- main/
 |   |   |-- java/com/novafarma/app/
@@ -66,45 +66,96 @@ Marcos_de_Desarrollo_Web_Proyecto-master/
 |   |   |   |   |-- img/
 |   |   |   |   |   |-- adminitarcionfarmacia.jpg
 |   |   |   |   |   |-- novafarmalogo.png
-|-- capturas/                       (Evidencias ATF1)
+|-- capturas/                       (Evidencias visuales ATF1 + ATF2)
 ```
 
 ---
 
-## Como Ejecutar
+## Requisitos Previos
 
-**Requisito unico:** Java 21 instalado.
-
-### Paso 1: Compilar (si descargas de GitHub)
-
-Abre terminal en la carpeta del proyecto y ejecuta:
+Antes de ejecutar, verifica que tienes Java 21 o superior instalado.
 
 ```bash
-mvn clean package
+java -version
 ```
 
-Esto crea el archivo `target/novafarma-spring-1.0.0.jar`.
+Debe mostrar algo como:
+```
+openjdk version "21" ...
+```
 
-### Paso 2: Ejecutar
+Si muestra 8, 11 o 17, descarga e instala Java 21 desde:
+https://adoptium.net/
+
+---
+
+## Ejecucion con ZIP de Entrega (Recomendado)
+
+Usa este metodo si descargaste el ZIP que contiene el JAR ya compilado.
+
+**Paso 1:** Descomprime el ZIP.
+
+**Paso 2:** Abre la terminal dentro de la carpeta que contiene `pom.xml`.
+
+> Nota: El ZIP tiene carpetas anidadas. Asegurate de estar en la carpeta INTERNA donde esta el archivo `pom.xml`.
+
+**Paso 3:** Ejecuta el JAR:
 
 ```bash
 java -jar target/novafarma-spring-1.0.0.jar
 ```
 
-### Paso 3: Abrir en navegador
+**Paso 4:** Abre tu navegador en:
 
 ```
 http://localhost:8080
 ```
 
+El servidor estara corriendo mientras la terminal permanezca abierta.
+Para detenerlo, presiona `Ctrl + C` en la terminal.
+
+> Nota: Los datos se almacenan temporalmente en memoria. Al reiniciar la aplicacion, solo se conservan los productos de prueba iniciales.
+
 ---
 
-### Si descargas el ZIP de entrega
+## Ejecucion desde GitHub (Para Desarrolladores)
 
-El JAR ya esta compilado. Solo ejecuta:
+Usa este metodo si clonaste el repositorio. Requiere Maven instalado.
+
+**Paso 1:** Clona el repositorio:
+
+```bash
+git clone https://github.com/Kaiilo1020/Marcos_de_Desarrollo_Web_Proyecto.git
+```
+
+**Paso 2:** Entra a la carpeta del proyecto (donde esta `pom.xml`):
+
+```bash
+cd Marcos_de_Desarrollo_Web_Proyecto-master/Marcos_de_Desarrollo_Web_Proyecto-master
+```
+
+**Paso 3:** Verifica que tienes Maven instalado:
+
+```bash
+mvn -version
+```
+
+**Paso 4:** Compila el proyecto:
+
+```bash
+mvn clean package
+```
+
+**Paso 5:** Ejecuta el JAR generado:
 
 ```bash
 java -jar target/novafarma-spring-1.0.0.jar
+```
+
+**Paso 6:** Abre tu navegador en:
+
+```
+http://localhost:8080
 ```
 
 ---
