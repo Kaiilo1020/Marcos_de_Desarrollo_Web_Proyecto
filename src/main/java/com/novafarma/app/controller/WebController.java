@@ -2,10 +2,8 @@ package com.novafarma.app.controller;
 
 import com.novafarma.app.model.entity.Producto;
 import com.novafarma.app.model.entity.Incidencia;
-import com.novafarma.app.model.entity.HistorialModificacion;
 import com.novafarma.app.service.ProductoService;
 import com.novafarma.app.service.IncidenciaService;
-import com.novafarma.app.service.HistorialModificacionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +18,10 @@ public class WebController {
 
     private final ProductoService productoService;
     private final IncidenciaService incidenciaService;
-    private final HistorialModificacionService historialService;
 
-    public WebController(ProductoService productoService, IncidenciaService incidenciaService, HistorialModificacionService historialService) {
+    public WebController(ProductoService productoService, IncidenciaService incidenciaService) {
         this.productoService = productoService;
         this.incidenciaService = incidenciaService;
-        this.historialService = historialService;
     }
 
     @GetMapping("/")
@@ -48,13 +44,11 @@ public class WebController {
     public String alertas(Model model) {
         model.addAttribute("alertas", productoService.obtenerAlertas());
         model.addAttribute("incidencias", incidenciaService.listarTodas());
-        model.addAttribute("historial", historialService.listarTodas());
         return "alertas";
     }
 
     @GetMapping("/registro")
     public String registro(Model model) {
-        model.addAttribute("incidencias", incidenciaService.listarTodas());
         model.addAttribute("productos", productoService.listarTodos());
         return "registro";
     }
@@ -93,11 +87,18 @@ public class WebController {
             }
         }
 
-        // Guardar en historial
-        String detalleHistorial = "Tipo: " + tipo + ". " + descripcion;
-        HistorialModificacion historial = new HistorialModificacion("INCIDENCIA", medicamento, detalleHistorial, LocalDate.parse(fecha));
-        historialService.guardar(historial);
-
         return "redirect:/registro?exito=true";
+    }
+
+    @PostMapping("/alertas/retirar")
+    public String retirarProducto(@RequestParam String nombre) {
+        Producto p = productoService.buscarPorNombre(nombre);
+        if (p != null) {
+            String tipo = p.isVencido() ? "Retiro por vencimiento" : "Retiro por stock bajo";
+            Incidencia incidencia = new Incidencia(tipo, nombre, p.getStock(), LocalDate.now(), "Producto retirado desde Sistema de Alertas");
+            incidenciaService.guardar(incidencia);
+            productoService.eliminarPorNombre(nombre);
+        }
+        return "redirect:/alertas?exito=true";
     }
 }
