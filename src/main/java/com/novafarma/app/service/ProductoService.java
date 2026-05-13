@@ -47,4 +47,8 @@ public class ProductoService {
     public boolean eliminarPorNombre(String nombre) {
         return productoRepository.deleteByNombre(nombre);
     }
+
+    public void restarStockOEliminar(String nombre, int cantidad) {
+        productoRepository.restarStockOEliminar(nombre, cantidad);
+    }
 }

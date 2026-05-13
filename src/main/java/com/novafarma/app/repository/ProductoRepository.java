@@ -52,4 +52,18 @@ public class ProductoRepository {
     public boolean deleteByNombre(String nombre) {
         return productos.removeIf(p -> p.getNombre().equalsIgnoreCase(nombre));
     }
+
+    public void restarStockOEliminar(String nombre, int cantidad) {
+        productos.stream()
+                .filter(p -> p.getNombre().equalsIgnoreCase(nombre))
+                .findFirst()
+                .ifPresent(p -> {
+                    int nuevoStock = p.getStock() - cantidad;
+                    if (nuevoStock <= 0) {
+                        productos.remove(p);
+                    } else {
+                        p.setStock(nuevoStock);
+                    }
+                });
+    }
 }

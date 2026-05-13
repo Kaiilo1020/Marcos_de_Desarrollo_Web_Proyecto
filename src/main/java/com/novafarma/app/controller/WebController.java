@@ -79,12 +79,16 @@ public class WebController {
         Incidencia incidencia = new Incidencia(tipo, medicamento, cantidad, LocalDate.parse(fecha), descripcion);
         incidenciaService.guardar(incidencia);
 
-        // Si es "Registro incorrecto", eliminar el producto del inventario
+        // Aplicar logica segun el tipo de incidencia
         if ("Registro incorrecto".equals(tipo)) {
+            // Eliminar el producto completamente
             Producto p = productoService.buscarPorNombre(medicamento);
             if (p != null) {
                 productoService.eliminarPorNombre(medicamento);
             }
+        } else {
+            // Merma, Accidente, Perdida: restar stock del inventario
+            productoService.restarStockOEliminar(medicamento, cantidad);
         }
 
         return "redirect:/registro?exito=true";
