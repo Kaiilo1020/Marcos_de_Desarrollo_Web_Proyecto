@@ -41,4 +41,15 @@ public class ProductoRepository {
     public long count() {
         return productos.size();
     }
+
+    public Producto findByNombre(String nombre) {
+        return productos.stream()
+                .filter(p -> p.getNombre().equalsIgnoreCase(nombre))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public boolean deleteByNombre(String nombre) {
+        return productos.removeIf(p -> p.getNombre().equalsIgnoreCase(nombre));
+    }
 }

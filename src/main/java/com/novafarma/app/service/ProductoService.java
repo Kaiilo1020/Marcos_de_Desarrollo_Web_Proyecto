@@ -39,4 +39,12 @@ public class ProductoService {
                 .filter(p -> p.isStockBajo() || p.isVencido())
                 .count();
     }
+
+    public Producto buscarPorNombre(String nombre) {
+        return productoRepository.findByNombre(nombre);
+    }
+
+    public boolean eliminarPorNombre(String nombre) {
+        return productoRepository.deleteByNombre(nombre);
+    }
 }

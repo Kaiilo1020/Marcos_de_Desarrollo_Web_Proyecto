@@ -9,49 +9,124 @@
         <section class="py-5">
             <div class="container py-4">
                 <h2 class="mb-4 fw-bolder text-corporativo">Sistema de Alertas</h2>
-                <p class="text-muted mb-4">Monitoreo de vencimientos y quiebres de stock.</p>
+                <p class="text-muted mb-4">Monitoreo de vencimientos, quiebres de stock e incidencias.</p>
 
-                <div class="card shadow-sm border-0">
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="px-4 py-3">Estado</th>
-                                        <th class="py-3">Producto</th>
-                                        <th class="py-3">Lote</th>
-                                        <th class="py-3 text-center">Stock</th>
-                                        <th class="py-3">Vencimiento</th>
-                                        <th class="px-4 py-3 text-center">Accion</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="alerta : ${alertas}" 
-                                        th:classappend="${alerta.stock <= 5 or alerta.vencido} ? 'table-row-peligro' : 'table-row-advertencia'">
-                                        <td class="px-4">
-                                            <span th:if="${alerta.vencido}" class="badge bg-peligro">VENCIDO</span>
-                                            <span th:if="${alerta.venceProximo and !alerta.vencido}" class="badge bg-advertencia text-dark">&lt;30 DIAS</span>
-                                            <span th:if="${alerta.stockBajo and !alerta.vencido and !alerta.venceProximo}" class="badge bg-advertencia text-dark">STOCK BAJO</span>
-                                        </td>
-                                        <td class="fw-bold" th:text="${alerta.nombre}">Producto</td>
-                                        <td th:text="${alerta.lote}">Lote</td>
-                                        <td class="text-center fw-bold" th:text="${alerta.stock}" th:classappend="${alerta.stock <= 5} ? 'text-peligro' : 'text-advertencia'">0</td>
-                                        <td th:text="${#temporals.format(alerta.fechaVencimiento, 'dd/MM/yyyy')}" th:classappend="${alerta.vencido} ? 'text-peligro fw-bold' : 'text-advertencia fw-bold'">01/01/2026</td>
-                                        <td class="px-4 text-center">
-                                            <button th:if="${alerta.vencido}" class="btn btn-sm btn-peligro">Retirar</button>
-                                            <button th:unless="${alerta.vencido}" class="btn btn-sm btn-advertencia">Reordenar</button>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${#lists.isEmpty(alertas)}">
-                                        <td colspan="6" class="text-center py-4 text-muted">
-                                            <i class="bi bi-check-circle-fill text-exito me-2"></i>No hay alertas activas. Todo esta bajo control.
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <!-- SECCION 1: Productos con Alertas -->
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-exclamation-triangle text-advertencia me-2"></i>Productos que Requieren Atencion</h5>
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="px-4 py-3">Estado</th>
+                                            <th class="py-3">Producto</th>
+                                            <th class="py-3">Lote</th>
+                                            <th class="py-3 text-center">Stock</th>
+                                            <th class="py-3">Vencimiento</th>
+                                            <th class="px-4 py-3 text-center">Accion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="alerta : ${alertas}" 
+                                            th:classappend="${alerta.stock <= 5 or alerta.vencido} ? 'table-row-peligro' : 'table-row-advertencia'">
+                                            <td class="px-4">
+                                                <span th:if="${alerta.vencido}" class="badge bg-peligro">VENCIDO</span>
+                                                <span th:if="${alerta.venceProximo and !alerta.vencido}" class="badge bg-advertencia text-dark">&lt;30 DIAS</span>
+                                                <span th:if="${alerta.stockBajo and !alerta.vencido and !alerta.venceProximo}" class="badge bg-advertencia text-dark">STOCK BAJO</span>
+                                            </td>
+                                            <td class="fw-bold" th:text="${alerta.nombre}">Producto</td>
+                                            <td th:text="${alerta.lote}">Lote</td>
+                                            <td class="text-center fw-bold" th:text="${alerta.stock}" th:classappend="${alerta.stock <= 5} ? 'text-peligro' : 'text-advertencia'">0</td>
+                                            <td th:text="${#temporals.format(alerta.fechaVencimiento, 'dd/MM/yyyy')}" th:classappend="${alerta.vencido} ? 'text-peligro fw-bold' : 'text-advertencia fw-bold'">01/01/2026</td>
+                                            <td class="px-4 text-center">
+                                                <span th:if="${alerta.vencido}" class="badge bg-peligro">Retirar</span>
+                                                <span th:unless="${alerta.vencido}" class="badge bg-advertencia text-dark">Retirar</span>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${#lists.isEmpty(alertas)}">
+                                            <td colspan="6" class="text-center py-4 text-muted">
+                                                <i class="bi bi-check-circle-fill text-exito me-2"></i>No hay alertas activas. Todo esta bajo control.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- SECCION 2: Incidencias Registradas -->
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-exclamation-octagon text-peligro me-2"></i>Incidencias Registradas</h5>
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="px-4 py-3">Tipo</th>
+                                            <th class="py-3">Medicamento</th>
+                                            <th class="py-3 text-center">Cantidad</th>
+                                            <th class="py-3">Fecha</th>
+                                            <th class="py-3">Descripcion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="inc : ${incidencias}">
+                                            <td class="px-4"><span class="badge bg-light text-dark border" th:text="${inc.tipo}">Tipo</span></td>
+                                            <td class="fw-bold" th:text="${inc.medicamentoAfectado}">Medicamento</td>
+                                            <td class="text-center" th:text="${inc.cantidadAfectada}">0</td>
+                                            <td th:text="${#temporals.format(inc.fechaIncidente, 'dd/MM/yyyy')}">01/01/2026</td>
+                                            <td th:text="${inc.descripcion}">Descripcion</td>
+                                        </tr>
+                                        <tr th:if="${#lists.isEmpty(incidencias)}">
+                                            <td colspan="5" class="text-center py-4 text-muted">
+                                                <i class="bi bi-info-circle me-2"></i>No hay incidencias registradas.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCION 3: Historial de Retiros y Cambios -->
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-clock-history text-corporativo me-2"></i>Historial de Retiros y Cambios</h5>
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="px-4 py-3">Fecha</th>
+                                            <th class="py-3">Producto</th>
+                                            <th class="py-3">Accion</th>
+                                            <th class="py-3">Detalle</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="h : ${historial}">
+                                            <td class="px-4" th:text="${#temporals.format(h.fecha, 'dd/MM/yyyy')}">01/01/2026</td>
+                                            <td class="fw-bold" th:text="${h.nombreProducto}">Producto</td>
+                                            <td><span class="badge bg-secondary" th:text="${h.tipoAccion}">ACCION</span></td>
+                                            <td th:text="${h.detalle}">Detalle</td>
+                                        </tr>
+                                        <tr th:if="${#lists.isEmpty(historial)}">
+                                            <td colspan="4" class="text-center py-4 text-muted">
+                                                <i class="bi bi-info-circle me-2"></i>No hay registros en el historial.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>

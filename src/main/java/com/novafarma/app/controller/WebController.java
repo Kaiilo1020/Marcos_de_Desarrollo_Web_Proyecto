@@ -2,8 +2,10 @@ package com.novafarma.app.controller;
 
 import com.novafarma.app.model.entity.Producto;
 import com.novafarma.app.model.entity.Incidencia;
+import com.novafarma.app.model.entity.HistorialModificacion;
 import com.novafarma.app.service.ProductoService;
 import com.novafarma.app.service.IncidenciaService;
+import com.novafarma.app.service.HistorialModificacionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,17 +14,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Controller
 public class WebController {
 
     private final ProductoService productoService;
     private final IncidenciaService incidenciaService;
+    private final HistorialModificacionService historialService;
 
-    public WebController(ProductoService productoService, IncidenciaService incidenciaService) {
+    public WebController(ProductoService productoService, IncidenciaService incidenciaService, HistorialModificacionService historialService) {
         this.productoService = productoService;
         this.incidenciaService = incidenciaService;
+        this.historialService = historialService;
     }
 
     @GetMapping("/")
@@ -44,12 +47,15 @@ public class WebController {
     @GetMapping("/alertas")
     public String alertas(Model model) {
         model.addAttribute("alertas", productoService.obtenerAlertas());
+        model.addAttribute("incidencias", incidenciaService.listarTodas());
+        model.addAttribute("historial", historialService.listarTodas());
         return "alertas";
     }
 
     @GetMapping("/registro")
     public String registro(Model model) {
         model.addAttribute("incidencias", incidenciaService.listarTodas());
+        model.addAttribute("productos", productoService.listarTodos());
         return "registro";
     }
 
@@ -58,26 +64,14 @@ public class WebController {
             @RequestParam String nombre,
             @RequestParam String categoria,
             @RequestParam int cantidad,
-            @RequestParam String loteVencimiento) {
+            @RequestParam BigDecimal precio,
+            @RequestParam String lote,
+            @RequestParam String fechaVencimiento) {
 
-        String lote = loteVencimiento;
-        LocalDate fechaVencimiento = LocalDate.now().plusMonths(12);
-
-        try {
-            if (loteVencimiento.toLowerCase().contains("vence")) {
-                String[] partes = loteVencimiento.split("Vence");
-                lote = partes[0].trim();
-                String fechaStr = partes[1].trim();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                fechaVencimiento = LocalDate.parse("01/" + fechaStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            }
-        } catch (Exception e) {
-            fechaVencimiento = LocalDate.now().plusMonths(12);
-        }
-
-        Producto producto = new Producto(nombre, categoria, lote, cantidad, new BigDecimal("1.00"), fechaVencimiento);
+        LocalDate fechaVenc = LocalDate.parse(fechaVencimiento);
+        Producto producto = new Producto(nombre, categoria, lote, cantidad, precio, fechaVenc);
         productoService.guardar(producto);
-        return "redirect:/inventario";
+        return "redirect:/inventario?exito=true";
     }
 
     @PostMapping("/registro/incidencia")
@@ -90,6 +84,20 @@ public class WebController {
 
         Incidencia incidencia = new Incidencia(tipo, medicamento, cantidad, LocalDate.parse(fecha), descripcion);
         incidenciaService.guardar(incidencia);
-        return "redirect:/registro";
+
+        // Si es "Registro incorrecto", eliminar el producto del inventario
+        if ("Registro incorrecto".equals(tipo)) {
+            Producto p = productoService.buscarPorNombre(medicamento);
+            if (p != null) {
+                productoService.eliminarPorNombre(medicamento);
+            }
+        }
+
+        // Guardar en historial
+        String detalleHistorial = "Tipo: " + tipo + ". " + descripcion;
+        HistorialModificacion historial = new HistorialModificacion("INCIDENCIA", medicamento, detalleHistorial, LocalDate.parse(fecha));
+        historialService.guardar(historial);
+
+        return "redirect:/registro?exito=true";
     }
 }

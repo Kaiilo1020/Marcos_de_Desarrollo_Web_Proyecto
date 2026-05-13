@@ -45,10 +45,21 @@
                                             <input type="number" name="cantidad" class="form-control bg-light" min="1" placeholder="0" required>
                                         </div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Precio Unitario (S/)</label>
+                                            <input type="number" name="precio" class="form-control bg-light" min="0.01" step="0.01" placeholder="0.00" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Lote</label>
+                                            <input type="text" name="lote" class="form-control bg-light" placeholder="Ej. PF-2025-014" required>
+                                        </div>
+                                    </div>
                                     
                                     <div class="mb-4">
-                                        <label class="form-label fw-bold">Lote / Vencimiento</label>
-                                        <input type="text" name="loteVencimiento" class="form-control bg-light" placeholder="Ej. Lote A-123 - Vence 12/2026" required>
+                                        <label class="form-label fw-bold">Fecha de Vencimiento</label>
+                                        <input type="date" name="fechaVencimiento" class="form-control bg-light" required>
                                     </div>
                                     
                                     <button type="submit" class="btn btn-corporativo w-100 fw-bold">
@@ -63,27 +74,31 @@
                         <div class="card shadow-sm border-0 h-100">
                             <div class="card-body p-4 p-md-5">
                                 <h4 class="fw-bold mb-4"><i class="bi bi-exclamation-octagon text-advertencia me-2"></i>Reportar Incidencia</h4>
-                                <form th:action="@{/registro/incidencia}" method="post">
+                                <form th:action="@{/registro/incidencia}" method="post" id="formIncidencia">
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">Tipo de incidencia</label>
-                                        <select name="tipo" class="form-select bg-light" required>
+                                        <select name="tipo" id="tipoIncidencia" class="form-select bg-light" required>
                                             <option value="" selected disabled>Seleccionar tipo...</option>
                                             <option value="Merma">Merma (producto danado)</option>
                                             <option value="Accidente">Accidente/Rotura</option>
-                                            <option value="Vencido">Producto vencido no registrado</option>
+                                            <option value="Producto vencido no registrado">Producto vencido no registrado</option>
                                             <option value="Perdida">Perdida/Misterio</option>
+                                            <option value="Registro incorrecto">Registro incorrecto</option>
                                         </select>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">Medicamento afectado</label>
-                                        <input type="text" name="medicamento" class="form-control bg-light" placeholder="Ej. Amoxicilina 500mg" required>
+                                        <select name="medicamento" id="medicamentoSelect" class="form-select bg-light" required>
+                                            <option value="" selected disabled>Seleccionar producto...</option>
+                                            <option th:each="prod : ${productos}" th:value="${prod.nombre}" th:text="${prod.nombre}" th:data-stock="${prod.stock}">Producto</option>
+                                        </select>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label fw-bold">Cantidad afectada</label>
-                                            <input type="number" name="cantidad" class="form-control bg-light" min="1" placeholder="0" required>
+                                            <input type="number" name="cantidad" id="cantidadAfectada" class="form-control bg-light" min="1" placeholder="0" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label fw-bold">Fecha del incidente</label>
@@ -106,10 +121,13 @@
 
                 </div>
 
-                <div class="row mt-5" th:if="${!#lists.isEmpty(incidencias)}">
+                <div class="row mt-5">
                     <div class="col-12">
                         <h4 class="fw-bold text-corporativo mb-3">Incidencias Registradas</h4>
-                        <div class="table-responsive bg-white rounded shadow-sm border">
+                        <div th:if="${#lists.isEmpty(incidencias)}" class="alert alert-light border text-center">
+                            <i class="bi bi-info-circle me-2"></i>No hay incidencias registradas.
+                        </div>
+                        <div th:if="${!#lists.isEmpty(incidencias)}" class="table-responsive bg-white rounded shadow-sm border">
                             <table class="table align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
@@ -141,7 +159,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-exito text-white border-0">
-                    <h5 class="modal-title" id="modalLabel"><i class="bi bi-check-circle-fill me-2"></i>Registro Exitoso</h5>
+                    <h5 class="modal-title" id="modalLabel"><i class="bi bi-check-circle-fill me-2"></i>Operacion Exitosa</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center p-4">
@@ -157,5 +175,35 @@
     <div th:replace="~{fragments/layout :: footer}"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:if="${param.exito != null}">
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
+            modal.show();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tipoSelect = document.getElementById('tipoIncidencia');
+            var medSelect = document.getElementById('medicamentoSelect');
+            var cantInput = document.getElementById('cantidadAfectada');
+
+            function actualizarCantidad() {
+                var tipo = tipoSelect.value;
+                var opcionSeleccionada = medSelect.options[medSelect.selectedIndex];
+                var stock = opcionSeleccionada.getAttribute('data-stock');
+
+                if (tipo === 'Registro incorrecto' && stock) {
+                    cantInput.value = stock;
+                    cantInput.readOnly = true;
+                } else {
+                    cantInput.value = '';
+                    cantInput.readOnly = false;
+                }
+            }
+
+            tipoSelect.addEventListener('change', actualizarCantidad);
+            medSelect.addEventListener('change', actualizarCantidad);
+        });
+    </script>
 </body>
 </html>

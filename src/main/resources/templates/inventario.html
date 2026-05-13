@@ -21,7 +21,6 @@
                                     <th class="fw-normal py-3 text-center">Stock</th>
                                     <th class="fw-normal py-3 text-end">Precio</th>
                                     <th class="fw-normal py-3 text-center">Vencimiento</th>
-                                    <th class="fw-normal py-3 text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,11 +38,6 @@
                                     </td>
                                     <td class="text-end fw-bold" th:text="'S/ ' + ${#numbers.formatDecimal(producto.precio, 1, 'COMMA', 2, 'POINT')}">S/ 0.00</td>
                                     <td class="text-center" th:text="${#temporals.format(producto.fechaVencimiento, 'dd/MM/yyyy')}">01/01/2026</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-light text-muted border-0"><i class="bi bi-eye"></i></button>
-                                        <button class="btn btn-sm btn-light text-muted border-0"><i class="bi bi-pencil-square"></i></button>
-                                        <button class="btn btn-sm btn-light text-muted border-0" title="Desactivar"><i class="bi bi-slash-circle"></i></button>
-                                    </td>
                                 </tr>
                             </tbody>
                         </table>
